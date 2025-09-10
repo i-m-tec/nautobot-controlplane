@@ -1,0 +1,43 @@
+kind: workload
+name: nautobot-redis
+description: redis for nautobot
+spec:
+  type: standard
+  # identityLink: //gvc/demo/identity/nautobot-identity
+  containers:
+    - name: redis
+      image: redis:6-alpine
+      cpu: 150m
+      memory: 200Mi
+      inheritEnv: true
+      command: redis-server
+      args:
+        - --appendonly
+        - "yes"
+        - --requirepass
+        - "$(REDIS_PASSWORD)"
+      ports:
+        - number: 6379
+          protocol: tcp
+      env:
+        - name: REDIS_PASSWORD
+          value: nautobot
+  defaultOptions:
+    autoscaling:
+      maxConcurrency: 0
+      maxScale: 1
+      metric: disabled
+      minScale: 1
+      scaleToZeroDelay: 300
+      target: 1
+    capacityAI: false
+    debug: false
+    suspend: false
+    timeoutSeconds: 5
+  firewallConfig:
+    external:
+      inboundAllowCIDR: []
+      outboundAllowCIDR: []
+    internal:
+      inboundAllowType: same-gvc
+      inboundAllowWorkload: []

@@ -1,0 +1,97 @@
+kind: workload
+name: nautobot
+description: Nautobot in ControlPlane
+spec:
+  type: standard
+  # identityLink: //gvc/demo/identity/nautobot-identity
+  containers:
+    - &nautobot_container
+      name: web
+      image: networktocode/nautobot
+      cpu: 400m
+      memory: 1600Mi
+      inheritEnv: true
+      ports:
+        - number: 8080
+          protocol: http
+      env:
+        # Django/Nautobot
+        - name: NAUTOBOT_SECRET_KEY
+          value: PvVLPGgSD1SmtKSZiQpXvjIgG9EfszjeRqH4p3HFJbscB9p62BsqIPD8UTmTXuDy
+        - name: NAUTOBOT_ALLOWED_HOSTS
+          value: "nautobot.demo.inertialabs.io"
+        - name: CSRF_TRUSTED_ORIGINS
+          value: "https://nautobot.demo.inertialabs.io"
+        - name: NAUTOBOT_LOG_LEVEL
+          value: INFO
+        #- name: UWSGI_BUFFER_SIZE
+        #  value: "65535"
+        # DB
+        - name: NAUTOBOT_DB_NAME
+          value: nautobot
+        - name: NAUTOBOT_DB_USER
+          value: nautobot
+        - name: NAUTOBOT_DB_PASSWORD
+          value: nautobot
+        - name: NAUTOBOT_DB_HOST
+          value: nautobot-db.demo.cpln.local
+        - name: NAUTOBOT_DB_PORT
+          value: "5432"
+        # Redis for Celery broker and cache
+        - name: NAUTOBOT_REDIS_HOST
+          value: nautobot-redis.demo.cpln.local
+        - name: NAUTOBOT_REDIS_PORT
+          value: "6379"
+        - name: NAUTOBOT_REDIS_PASSWORD
+          value: nautobot
+    - <<: *nautobot_container
+      name: worker
+      cpu: 250m
+      memory: 800Mi
+      command: nautobot-server
+      args:
+        - "celery"
+        - "worker"
+        - "--loglevel"
+        - "INFO"
+        - --pool
+        - solo
+        - --concurrency
+        - "1"
+        - --prefetch-multiplier
+        - "1"
+        - --max-tasks-per-child
+        - "50"
+      ports: []
+    - <<: *nautobot_container
+      name: scheduler
+      cpu: 250m
+      memory: 800Mi
+      command: nautobot-server
+      args:
+        - "celery"
+        - "beat"
+        - "--loglevel"
+        - "INFO"
+      ports: []
+  defaultOptions:
+    autoscaling:
+      maxConcurrency: 0
+      maxScale: 1
+      metric: disabled
+      minScale: 1
+      scaleToZeroDelay: 300
+      target: 1
+    capacityAI: false
+    debug: false
+    suspend: false
+    timeoutSeconds: 5
+  firewallConfig:
+    external:
+      inboundAllowCIDR:
+        - 0.0.0.0/0
+      outboundAllowCIDR:
+        - 0.0.0.0/0
+    internal:
+      inboundAllowType: same-gvc
+      inboundAllowWorkload: []
