@@ -3,7 +3,7 @@ name: nautobot
 description: Nautobot in ControlPlane
 spec:
   type: standard
-  # identityLink: //gvc/demo/identity/nautobot-identity
+  # identityLink: //gvc/YOUR-GVC/identity/nautobot-identity
   containers:
     - &nautobot_container
       name: web
@@ -17,11 +17,11 @@ spec:
       env:
         # Django/Nautobot
         - name: NAUTOBOT_SECRET_KEY
-          value: KJxTSPyqcZ6ewu6JEIwp1miMQn8HUiogkuIM7cAaANDULd4MArAGPNA8BU0RdknI
+          value: a_long_random_string
         - name: NAUTOBOT_ALLOWED_HOSTS
-          value: "nautobot.demo.inertialabs.io"
+          value: "nautobot.YOUR-SUBDOMAIN.YOUR-DOMAIN"
         - name: CSRF_TRUSTED_ORIGINS
-          value: "https://nautobot.demo.inertialabs.io"
+          value: "https://nautobot.YOUR-SUBDOMAIN.YOUR-DOMAIN"
         - name: NAUTOBOT_LOG_LEVEL
           value: INFO
         #- name: UWSGI_BUFFER_SIZE
@@ -34,12 +34,12 @@ spec:
         - name: NAUTOBOT_DB_PASSWORD
           value: nautobot
         - name: NAUTOBOT_DB_HOST
-          value: nautobot-db.demo.cpln.local
+          value: nautobot-db.YOUR-GVC.cpln.local
         - name: NAUTOBOT_DB_PORT
           value: "5432"
         # Redis for Celery broker and cache
         - name: NAUTOBOT_REDIS_HOST
-          value: nautobot-redis.demo.cpln.local
+          value: nautobot-redis.YOUR-GVC.cpln.local
         - name: NAUTOBOT_REDIS_PORT
           value: "6379"
         - name: NAUTOBOT_REDIS_PASSWORD

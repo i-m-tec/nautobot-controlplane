@@ -6,6 +6,11 @@ Deploy Nautobot, a Netbox alternative, to ControlPlane.com
 
 ## ControlPlane
 [ControlPlane](https://controlplane.com/) is a multi-cloud developer platform.
+
+## YouTube Demo
+[![Nautobot in ControlPlane.com Demo](https://img.youtube.com/vi/rbdstWflEZY/0.jpg)](https://www.youtube.com/watch?v=rbdstWflEZY)
+
+
 # Install cpln cli
 ```
 npm install -g @controlplane/cli

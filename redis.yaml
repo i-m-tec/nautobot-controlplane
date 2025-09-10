@@ -3,7 +3,7 @@ name: nautobot-redis
 description: redis for nautobot
 spec:
   type: standard
-  # identityLink: //gvc/demo/identity/nautobot-identity
+  # identityLink: //gvc/YOUR-GVC/identity/nautobot-identity
   containers:
     - name: redis
       image: redis:6-alpine
