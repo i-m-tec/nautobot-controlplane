@@ -17,7 +17,7 @@ spec:
       env:
         # Django/Nautobot
         - name: NAUTOBOT_SECRET_KEY
-          value: PvVLPGgSD1SmtKSZiQpXvjIgG9EfszjeRqH4p3HFJbscB9p62BsqIPD8UTmTXuDy
+          value: KJxTSPyqcZ6ewu6JEIwp1miMQn8HUiogkuIM7cAaANDULd4MArAGPNA8BU0RdknI
         - name: NAUTOBOT_ALLOWED_HOSTS
           value: "nautobot.demo.inertialabs.io"
         - name: CSRF_TRUSTED_ORIGINS
